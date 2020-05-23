@@ -23,21 +23,33 @@ class Todo {
 
             var s = _this.textField5.value;
             console.log(s);
-            if(s.match(/^(\d+)\+(\d+)i$/)) {
-                constReal=s.replace(/^(\d+)\+(\d+)i$/,"$1");
-                constImg=s.replace(/^(\d+)\+(\d+)i$/,"$2");
-            } else if(s.match(/^(\d+)i$/)) {
+            if(s.match(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/)) {
+                constReal=s.replace(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/,"$1");
+                constImg=s.replace(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/,"$2");
+            } else if(s.match(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/)) {
+                constReal=s.replace(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/,"$1");
+                constImg=s.replace(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/,"$2");
+            } else if(s.match(/^(-?\d+[.]?\d+)i$/)) {
                 constReal=0;
-                constImg=s.replace(/^(\d+)i$/,"$1");
-            } else if(s.match(/^(\d+)$/)) {
-                constReal=s.replace(/^(\d+)$/,"$1");
+                constImg=s.replace(/^(-?\d+[.]?\d+)i$/,"$1");
+            } else if(s.match(/^(-?\d+[.]?\d+)$/)) {
+                constReal=s.replace(/^(-?\d+[.]?\d+)$/,"$1");
                 constImg=0;
-            }else if(s.match(/^(\d+)\+i$/)) {
-                constReal=s.replace(/^(\d+)\+i$/,"$1");
+            } else if(s.match(/^(-?\d+[.]?\d+)\+i$/)) {
+                constReal=s.replace(/^(-?\d+[.]?\d+)\+i$/,"$1");
                 constImg=1;
+            } else if(s.match(/^(-?\d+[.]?\d+)\-i$/)) {
+                constReal=s.replace(/^(-?\d+[.]?\d+)\+i$/,"$1");
+                constImg=-1;
             } else if(s.match(/^i$/)) {
                 constReal=0;
                 constImg=1;
+            } else if(s.match(/^-i$/)) {
+                constReal=0;
+                constImg=-1;
+            } else {
+                constReal=ERROR;
+                constImg=ERROR;
             }
 
             _this.postJulia(minX,maxX,minY,maxY, constReal, constImg);
@@ -76,9 +88,11 @@ class Todo {
             i=key.replace(coo,"$1");
             j=key.replace(coo,"$2");
 
-            var red = (255/hash[key]).toString();
-            console.log(red);
-            c1.fillStyle = 'rgb(' + red + ',0,0)';
+            var r=255/100*hash[key];
+
+            var red = (r).toString();
+
+            c1.fillStyle = 'rgb('+red+',0,0)';
 
             c1.rect(i,j, 1, 1);
             c1.fill(); // 色を塗る

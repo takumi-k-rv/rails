@@ -1,12 +1,12 @@
 class CreateJuliaParams < ActiveRecord::Migration[6.0]
   def change
     create_table :julia_params do |t|
-      t.integer :min_x
-      t.integer :max_x
-      t.integer :min_y
-      t.integer :max_y
-      t.integer :real
-      t.integer :img
+      t.float :min_x
+      t.float :max_x
+      t.float :min_y
+      t.float :max_y
+      t.float :real
+      t.float :img
 
       t.timestamps
     end

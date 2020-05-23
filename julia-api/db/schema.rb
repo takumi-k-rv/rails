@@ -13,12 +13,12 @@
 ActiveRecord::Schema.define(version: 2020_05_18_192254) do
 
   create_table "julia_params", force: :cascade do |t|
-    t.integer "min_x"
-    t.integer "max_x"
-    t.integer "min_y"
-    t.integer "max_y"
-    t.integer "real"
-    t.integer "img"
+    t.float "min_x"
+    t.float "max_x"
+    t.float "min_y"
+    t.float "max_y"
+    t.float "real"
+    t.float "img"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
