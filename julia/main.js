@@ -22,34 +22,36 @@ class Todo {
             var constImg=0;
 
             var s = _this.textField5.value;
-            console.log(s);
-            if(s.match(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/)) {
-                constReal=s.replace(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/,"$1");
-                constImg=s.replace(/^(-?\d+[.]?\d+)\+(\d+[.]?\d+)i$/,"$2");
-            } else if(s.match(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/)) {
-                constReal=s.replace(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/,"$1");
-                constImg=s.replace(/^(-?\d+[.]?\d+)(-\d+[.]?\d+)i$/,"$2");
-            } else if(s.match(/^(-?\d+[.]?\d+)i$/)) {
-                constReal=0;
-                constImg=s.replace(/^(-?\d+[.]?\d+)i$/,"$1");
-            } else if(s.match(/^(-?\d+[.]?\d+)$/)) {
-                constReal=s.replace(/^(-?\d+[.]?\d+)$/,"$1");
-                constImg=0;
-            } else if(s.match(/^(-?\d+[.]?\d+)\+i$/)) {
-                constReal=s.replace(/^(-?\d+[.]?\d+)\+i$/,"$1");
-                constImg=1;
-            } else if(s.match(/^(-?\d+[.]?\d+)\-i$/)) {
-                constReal=s.replace(/^(-?\d+[.]?\d+)\+i$/,"$1");
-                constImg=-1;
-            } else if(s.match(/^i$/)) {
+            //console.log(s);
+
+
+            if(s.match(/^i$/)) {
                 constReal=0;
                 constImg=1;
             } else if(s.match(/^-i$/)) {
                 constReal=0;
                 constImg=-1;
+            } else if(s.match(/^(-?\d+(.\d+)?)\+i$/)) {
+                constReal=s.replace(/^(-?\d+(.\d+)?)\+i$/,"$1");
+                constImg=1;
+            } else if(s.match(/^(-?\d+(.\d+)?)\-i$/)) {
+                constReal=s.replace(/^(-?\d+(.\d+)?)-i$/,"$1");
+                constImg=-1;
+            } else if(s.match(/^(-?\d+(.\d+)?)$/)) {
+                constReal=s.replace(/^(-?\d+(.\d+)?)$/,"$1");
+                constImg=0;
+            } else if(s.match(/^(-?\d+(.\d+)?)i$/)) {
+                constReal=0;
+                constImg=s.replace(/^(-?\d+(.\d+)?)i$/,"$1");
+            } else if(s.match(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/)) {
+                constReal=s.replace(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/,"$1");
+                constImg=s.replace(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/,"$3");
+            } else if(s.match(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/)) {
+                constReal=s.replace(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/,"$1");
+                constImg=s.replace(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/,"$3");
             } else {
-                constReal=ERROR;
-                constImg=ERROR;
+                constReal="";
+                constImg="";
             }
 
             _this.postJulia(minX,maxX,minY,maxY, constReal, constImg);
@@ -75,40 +77,52 @@ class Todo {
     }
 
     appendJulia(julia) { // 画像処理
-        var canvas1 = document.getElementById('canvas1');
-        if ( ! canvas1 || ! canvas1.getContext ) { return false; }
-        var c1 = canvas1.getContext('2d');
+        var hash = julia;
+        console.log(hash)
+        if(hash.status === "ERROR") {
+            console.log(hash.data)
+            var m='';
 
-        var i,j;
-        var hash = julia.data;
-        var coo = /^(\d+)_(\d+)$/;
+            Object.keys(hash.data).map( function(key) {
+                if(key === 'min_x') {
+                    m += "Invalid input of min_x.\n";
+                } else if(key === 'max_x') {
+                    m += "Invalid input of max_x.\n";
+                } else if(key === 'min_y') {
+                    m += "Invalid input of min_y.\n";
+                } else if(key === 'max_y') {
+                    m += "Invalid input of max_y.\n";
+                } else if(key === 'img') {
+                    m += "Invalid input of comp_const.\n";
+                }
+            });
 
-        Object.keys(hash).map( function(key) {
-            c1.beginPath();
-            i=key.replace(coo,"$1");
-            j=key.replace(coo,"$2");
+            alert(m);
+        }
+        else if(hash.status === "SUCCESS") {
+            var canvas1 = document.getElementById('canvas1');
+            if ( ! canvas1 || ! canvas1.getContext ) { return false; }
+            var c1 = canvas1.getContext('2d');
 
-            var r=255/100*hash[key];
+            var i,j;
+            var hash = julia.data;
+            var coo = /^(\d+)_(\d+)$/;
 
-            var red = (r).toString();
+            Object.keys(hash).map( function(key) {
+                c1.beginPath();
+                i=key.replace(coo,"$1");
+                j=key.replace(coo,"$2");
 
-            c1.fillStyle = 'rgb('+red+',0,0)';
+                var r=255/100*hash[key];
 
-            c1.rect(i,j, 1, 1);
-            c1.fill(); // 色を塗る
-        });
+                var red = (r).toString();
 
-        // for (i = 0; i < 500; i++) {
-        //     for (j = 0; j < 500; j++) {
-        //         c1.beginPath();
-                
-        //         var red = (i).toString(10);
-        //         c1.fillStyle = 'rgb(' + red + ',0,0)';
+                c1.fillStyle = 'rgb('+red+',0,0)';
 
-        //         c1.rect(i,j, 1, 1);
-        //         c1.fill(); // 色を塗る
-        //     }
-        // }
+                c1.rect(i,j, 1, 1);
+                c1.fill(); // 色を塗る
+            });
+        }
     }
 }
 

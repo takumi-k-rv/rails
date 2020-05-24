@@ -12,9 +12,9 @@ class JuliaParamsController < ApplicationController
   def create
     post=JuliaParam.new(post_params)
     if post.save
-      render json: {status: 'SUCCESS', data: post}
+      julia(post)
     else
-      render json: {startus: 'ERROR', data: post.errors }
+      json_responce(post.errors, :unprocessable_entity)
     end
   end
 

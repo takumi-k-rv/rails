@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
   include Julia
-  include Response
-  include ExceptionHandler
+  include InputVerification
 end

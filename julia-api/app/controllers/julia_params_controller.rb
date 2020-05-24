@@ -10,11 +10,13 @@ class JuliaParamsController < ApplicationController
 
   # POST /julia_params
   def create
-    post=JuliaParam.new(post_params)
-    if post.save
-      julia(post)
-    else
-      render json: {startus: 'ERROR', data: post.errors }
+    if input_verification(post_params)
+      post=JuliaParam.new(post_params)
+      if post.save
+        julia(post)
+      else
+        render json: {status: "ERROR", data: post.errors}
+      end
     end
   end
 

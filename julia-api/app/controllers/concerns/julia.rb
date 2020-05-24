@@ -29,6 +29,6 @@ module Julia
       end
     end
 
-    render json: {status: 'SUCCESS', data: julia}
+    render json: {status: "SUCCESS", data: julia}
   end
 end
