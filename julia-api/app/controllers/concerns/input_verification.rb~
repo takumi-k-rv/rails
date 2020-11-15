@@ -1,6 +1,0 @@
-module InputVerification
-  def julia(object)
-    
-    render json: {status: 'SUCCESS', data: julia}
-  end
-end

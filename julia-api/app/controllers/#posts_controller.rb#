@@ -1,0 +1,44 @@
+class PostsController < ApplicationController
+  # # GET satori/julia
+  def index
+  end
+
+  # POST satori/julia
+  def create
+    if o = input_verification(post_params)
+      post=.new(o)
+      if post.save
+        julia_calc(post)
+      else
+        render json: {status: "ERROR", data: post.errors}
+      end
+    end
+  end
+
+  # GET satori/julia
+  def show
+  end
+
+  # GET satori/julia/new
+  def new
+  end
+
+  # GET satori/julia/edit
+  def edit
+  end
+
+  # PUT satori/julia
+  def update
+  end
+
+  # DELETE satori/julia
+  def destroy
+  end
+
+  private
+
+  #strong
+  def post_params
+    params.permit(:min_x, :max_x, :min_y, :max_y, :comp_const)
+  end
+end

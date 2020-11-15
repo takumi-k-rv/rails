@@ -1,5 +1,5 @@
-module Julia
-  def julia(object)
+module JuliaCalc
+  def julia_calc(object)
     # comp_const = complex(0,0)
     julia = {}
 

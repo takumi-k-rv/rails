@@ -7,7 +7,7 @@ class Todo {
         this.textField5 = textField5;
 
         this.sendButton = sendButton;
-        this.host     = "http://localhost:3001";
+        this.host     = "http://localhost:3001/satori/julia";
         this.setEventListener();
     }
 
@@ -18,49 +18,16 @@ class Todo {
             var maxX = _this.textField2.value;
             var minY = _this.textField3.value;
             var maxY = _this.textField4.value;
-            var constReal=0;
-            var constImg=0;
-
-            var s = _this.textField5.value;
+            var compConst = _this.textField5.value;
             //console.log(s);
 
-
-            if(s.match(/^i$/)) {
-                constReal=0;
-                constImg=1;
-            } else if(s.match(/^-i$/)) {
-                constReal=0;
-                constImg=-1;
-            } else if(s.match(/^(-?\d+(.\d+)?)\+i$/)) {
-                constReal=s.replace(/^(-?\d+(.\d+)?)\+i$/,"$1");
-                constImg=1;
-            } else if(s.match(/^(-?\d+(.\d+)?)\-i$/)) {
-                constReal=s.replace(/^(-?\d+(.\d+)?)-i$/,"$1");
-                constImg=-1;
-            } else if(s.match(/^(-?\d+(.\d+)?)$/)) {
-                constReal=s.replace(/^(-?\d+(.\d+)?)$/,"$1");
-                constImg=0;
-            } else if(s.match(/^(-?\d+(.\d+)?)i$/)) {
-                constReal=0;
-                constImg=s.replace(/^(-?\d+(.\d+)?)i$/,"$1");
-            } else if(s.match(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/)) {
-                constReal=s.replace(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/,"$1");
-                constImg=s.replace(/^(-?\d+(.\d+)?)\+(\d+(.\d+)?)i$/,"$3");
-            } else if(s.match(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/)) {
-                constReal=s.replace(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/,"$1");
-                constImg=s.replace(/^(-?\d+(.\d+)?)(-\d+(.\d+)?)i$/,"$3");
-            } else {
-                constReal="";
-                constImg="";
-            }
-
-            _this.postJulia(minX,maxX,minY,maxY, constReal, constImg);
+            _this.postJulia(minX,maxX,minY,maxY,compConst);
         });
     }
 
-    postJulia(minX, maxX, minY, maxY, constReal, constImg) { // post /julia_params
+    postJulia(minX, maxX, minY, maxY, compConst) { // post /julia_params
         var _this = this
-        axios.post(this.host + '/julia_params', { min_x: minX, max_x: maxX, min_y: minY, max_y: maxY, real: constReal, img: constImg })
+        axios.post(this.host, { min_x: minX, max_x: maxX, min_y: minY, max_y: maxY, comp_const: compConst })
             .then(function(res) {
                 var julia = res.data;
                 _this.appendJulia(julia);
@@ -84,17 +51,7 @@ class Todo {
             var m='';
 
             Object.keys(hash.data).map( function(key) {
-                if(key === 'min_x') {
-                    m += "Invalid input of min_x.\n";
-                } else if(key === 'max_x') {
-                    m += "Invalid input of max_x.\n";
-                } else if(key === 'min_y') {
-                    m += "Invalid input of min_y.\n";
-                } else if(key === 'max_y') {
-                    m += "Invalid input of max_y.\n";
-                } else if(key === 'img') {
-                    m += "Invalid input of comp_const.\n";
-                }
+                m += hash.data[key];
             });
 
             alert(m);

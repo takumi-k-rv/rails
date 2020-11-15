@@ -1,4 +1,4 @@
 class ApplicationController < ActionController::API
-  include Julia
+  include JuliaCalc
   include InputVerification
 end
